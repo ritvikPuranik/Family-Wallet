@@ -40,7 +40,7 @@ const MyNav = () => {
       <div className="row vh-100">
         <div className="col-2">
           <nav className="navbar bg-black vh-100 d-flex flex-column">
-            <ul className='nav navbar-nav mt-initial'>
+            <ul className='nav navbar-nav mt-initial align-items-center'>
             {routes.map(({ title, link }, index) => {
               return (
                 <li key={index} className="p-4 nav-item">
@@ -48,8 +48,8 @@ const MyNav = () => {
                 </li>
               );
             })}
-            </ul>
             {isParent && <ParentControls />}
+            </ul>
             
           </nav>
         </div>

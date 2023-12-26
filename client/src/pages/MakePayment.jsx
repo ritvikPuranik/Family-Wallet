@@ -1,74 +1,19 @@
 import React, {useState} from "react";
-import { Button, Modal, Table, Form } from 'react-bootstrap';
+import { Button, Modal, Form } from 'react-bootstrap';
 
 
 function MakePayment(){
     const [documentFile, setDocumentFile] = useState(null);
     const [showConfirmation, setShowConfirmation] = useState(false);
-    const [purpose, setPurpose] = useState("");
     const [txnDetails, setTxnDetails] = useState({"to":"", "amount": 0, purpose: ""});
     const handleClose = () => setShowConfirmation(false);
 
-    const ConfirmationPopup = () => {
-        return (      
-            <Modal show={showConfirmation} onHide={handleClose}>
-              <Modal.Header closeButton>
-                <Modal.Title>Confirm Transaction</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                  <h5 className="text-muted">Please confirm if the below details are correct</h5>
-                <Form>
-                    <Form.Group controlId="to">
-                    <Form.Label>To</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="to"
-                        value={txnDetails.to}
-                        disabled
-                    />
-                    </Form.Group>
-                    <Form.Group controlId="amount">
-                    <Form.Label>Amount</Form.Label>
-                    <Form.Control
-                        type="number"
-                        name="amount"
-                        value={txnDetails.amount}
-                        disabled
-                    />
-                    </Form.Group>
-                    <Form.Group controlId="purpose">
-                    <Form.Label>Purpose</Form.Label>
-                    <Form.Control
-                        type="text"
-                        placeholder="Enter Purpose"
-                        name="purpose"
-                        value={purpose}
-                        onChange={handlePurposeChange}
-                    />
-                    </Form.Group>
-                </Form>
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                  Close
-                </Button>
-                <Button variant="success" onClick={confirmTxn}>
-                  Confirm
-                </Button>
-              </Modal.Footer>
-            </Modal>
-        );
-        
-    };
-
     const handlePurposeChange = (e)=>{
-        e.preventDefault();
-        setPurpose(e.target.value);
+        setTxnDetails(oldDetails =>({...oldDetails, [e.target.name]: e.target.value }));
     }
 
     const confirmTxn = async()=>{
         console.log("transaction confirmed", txnDetails);
-        console.log("purpose>", purpose);
         handleClose();
     }
 
@@ -110,7 +55,53 @@ function MakePayment(){
             <button type="submit" onClick={processQr} className="btn btn-primary btn-lg mt-5">Submit</button>
         </form>
         </div>
-        {showConfirmation && <ConfirmationPopup />}
+
+        <Modal show={showConfirmation} onHide={handleClose}>
+              <Modal.Header closeButton>
+                <Modal.Title>Confirm Transaction</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                  <h5 className="text-muted">Please confirm if the below details are correct</h5>
+                <Form>
+                    <Form.Group className='mt-4' controlId="to">
+                    <Form.Label > <h4>To</h4></Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="to"
+                        value={txnDetails.to}
+                        disabled
+                    />
+                    </Form.Group>
+                    <Form.Group className='mt-4' controlId="amount">
+                    <Form.Label><h4>Amount</h4></Form.Label>
+                    <Form.Control
+                        type="number"
+                        name="amount"
+                        value={txnDetails.amount}
+                        disabled
+                    />
+                    </Form.Group>
+                    <Form.Group className='mt-4' controlId="purpose">
+                    <Form.Label><h4>Purpose</h4></Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="Enter Purpose"
+                        name="purpose"
+                        value={txnDetails.purpose}
+                        onChange={handlePurposeChange}
+                    />
+                    </Form.Group>
+                </Form>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                  Close
+                </Button>
+                <Button variant="success" onClick={confirmTxn}>
+                  Confirm
+                </Button>
+              </Modal.Footer>
+            </Modal>
         </>
     )
 }
