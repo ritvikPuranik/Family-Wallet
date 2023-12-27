@@ -1,32 +1,43 @@
 import React, { useEffect, useState } from "react";
+import useEth from "../contexts/EthContext/useEth";
+
 
 function ShowTransactions(){
+    // console.log("useEth>", useEth());
+    const { state: {web3, accounts, contract } } = useEth();
+    const [userAccount, setUserAccount] = useState("");
     const [transactions, setTransactions] = useState([]);
+
 
     useEffect(()=>{
         const populateData = async()=>{
-            let txns = [
-                {
-                "purpose": "Shopping",
-                "from": "0xcfaa058F281B3c9b9687cb3F87f0E8ae6187C288",
-                "to": "0x229Eca8815A419f83595E09414f5fe1D52543b6e",
-                "status": "approved",
-                "amount": "3 ether",
-                "date": "23rd Dec"
-            },
-            {
-                "purpose": "Movie",
-                "from": "0xcfaa058F281B3c9b9687cb3F87f0E8ae6187C288",
-                "to": "0x229Eca8815A419f83595E09414f5fe1D52543b6e",
-                "status": "requested",
-                "amount": "1 ether",
-                "date": "21st Dec"
-            }];
+            let txns = [];
+            try{
+                let txnLength = await contract.methods.txnCount().call({from: userAccount});
+                for(let i=0; i<txnLength; i++){
+                    let txnData = await contract.methods.txns(i).call({from: userAccount});
+                    // console.log("txnData>", txnData);
+                    txns.push(txnData);
+                }
+            }catch(err){
+                console.log("context not yet set>>", err);
+            }
+
             setTransactions(txns);
         }
 
+        const getAccount = async() =>{
+            let myAccounts = await accounts;
+            if(myAccounts){
+                let firstAccount = myAccounts[0];
+                console.log("account>", firstAccount);
+                setUserAccount(firstAccount);
+            }
+        }
+        getAccount();
         populateData();
-    },[]);
+    },[accounts]);
+
 
     return (
         <table className="table table-striped">

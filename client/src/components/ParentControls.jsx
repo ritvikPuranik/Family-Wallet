@@ -6,7 +6,7 @@ function ParentControls() {
         <>
         <h2 className='text-white m-5'>Parental Controls</h2>
         <li key='0' className="p-4">
-            <Link  className='nav-link text-white' to='add_parent'>Add Parent</Link>
+            <Link  className='nav-link text-white' to='add_member'>Add Member</Link>
         </li>
         <li key='1' className="p-4">
             <Link  className='nav-link text-white' to='authorize'>Authorize Payment Request</Link>

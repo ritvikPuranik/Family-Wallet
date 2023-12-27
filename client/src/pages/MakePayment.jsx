@@ -1,11 +1,14 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { Button, Modal, Form } from 'react-bootstrap';
+import useEth from "../contexts/EthContext/useEth";
 
 
 function MakePayment(){
+    const { state: {web3, accounts, contract } } = useEth();
     const [documentFile, setDocumentFile] = useState(null);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [txnDetails, setTxnDetails] = useState({"to":"", "amount": 0, purpose: ""});
+    const [userAccount, setUserAccount] = useState("");
     const handleClose = () => setShowConfirmation(false);
 
     const handlePurposeChange = (e)=>{
@@ -14,6 +17,9 @@ function MakePayment(){
 
     const confirmTxn = async()=>{
         console.log("transaction confirmed", txnDetails);
+        let {to, amount, purpose} = txnDetails;
+        let response = await contract.methods.newTxn(to, purpose).send({from: userAccount, value: amount});
+        console.log("response>", response);
         handleClose();
     }
 
@@ -39,6 +45,18 @@ function MakePayment(){
 
         setShowConfirmation(true);
     }
+
+    useEffect(() => {
+        const getAccount = async() =>{
+            let myAccounts = await accounts;
+            if(myAccounts){
+                let firstAccount = myAccounts[0];
+                setUserAccount(firstAccount);
+            }
+        }
+        
+        getAccount();
+      }, [accounts]);
 
     return(
         <>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Routes, Route, Link } from "react-router-dom";
 
@@ -8,8 +8,10 @@ import MakePayment from "./pages/MakePayment";
 import Footer from "./components/Footer";
 import AccountDetails from './components/AccountDetail';
 import ParentControls from './components/ParentControls';
-import AddParent from './pages/AddParent';
+import AddMember from './pages/AddMember';
 import AuthorizePayment from './pages/AuthorizePayment';
+
+import useEth from './contexts/EthContext/useEth';
 
 const routes = [
   {
@@ -24,6 +26,19 @@ const routes = [
 
 const MyNav = () => {
   const [isParent, setIsParent] = useState(true);
+  const { state: {contract, accounts, web3} } = useEth();
+
+  useEffect(() => {
+    const getAccount = async() =>{
+        let myAccounts = await accounts;
+        if(myAccounts){
+          let firstAccount = myAccounts[0];
+          let memberDetails = await contract.methods.members(firstAccount).call({from: firstAccount});
+          setIsParent(memberDetails.isParent);
+        }
+    }
+    getAccount();
+  }, [accounts]);
 
   return (
     <>
@@ -58,7 +73,7 @@ const MyNav = () => {
           <Routes>
             <Route path="/" element={<ShowTransactions />} />
             <Route path="payment" element={<MakePayment />} />
-            <Route path="add_parent" element={<AddParent />} />
+            <Route path="add_member" element={<AddMember />} />
             <Route path="authorize" element={<AuthorizePayment />} />
           </Routes>
         </div>

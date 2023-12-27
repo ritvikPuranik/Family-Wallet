@@ -15,7 +15,6 @@ function AccountDetails(){
                 let firstAccount = myAccounts[0];
                 let balance = await web3.eth.getBalance(firstAccount);
                 balance = web3.utils.fromWei(balance, 'ether');
-                console.log("account>", firstAccount);
                 // console.log("balance>", balance);
                 setUserAccount(firstAccount);
                 setAccountBalance(balance);
