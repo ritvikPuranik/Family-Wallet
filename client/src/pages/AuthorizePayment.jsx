@@ -65,7 +65,7 @@ function AuthorizePayment(){
                     <td className="fs-5">{item.from}</td>
                     <td className="fs-5">{item.to}</td>
                     <td>{item.purpose}</td>
-                    <td>{item.amount}</td>
+                    <td>{item.amount/10**18}</td>
                     <td> <span><button key={item.id} id={item.id} onClick={authorizeTxn} className="btn btn-success">Approve</button></span>     <span><button key={item.id} id={item.id} onClick={authorizeTxn} className="btn btn-danger">Reject</button></span></td>
                 </tr>
                 ))}

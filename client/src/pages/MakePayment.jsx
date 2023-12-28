@@ -16,8 +16,9 @@ function MakePayment(){
     }
 
     const confirmTxn = async()=>{
-        console.log("transaction confirmed", txnDetails);
         let {to, amount, purpose} = txnDetails;
+        amount = amount*10**18;
+        console.log("amount to deduct>", amount);
         let response = await contract.methods.newTxn(to, purpose).send({from: userAccount, value: amount});
         console.log("response>", response);
         handleClose();
@@ -27,7 +28,6 @@ function MakePayment(){
 
     const processQr = async(e)=>{
         e.preventDefault();
-        console.log("Entered QR code>>>", e.target);
 
         const formData = new FormData();
         formData.append('documentFile', documentFile);
@@ -38,12 +38,18 @@ function MakePayment(){
             body: formData
         };
 
+
+    try{
         let response = await fetch(`http://localhost:3000/upload`, requestOptions);
         response = await response.json();
-        console.log("QR decoded>", response);
         setTxnDetails({...response, "purpose": ""});
 
         setShowConfirmation(true);
+
+    }catch(err){
+        console.log("error while decoding QR code>>", err);
+        alert("error while decoding QR code");
+    }
     }
 
     useEffect(() => {
@@ -91,13 +97,16 @@ function MakePayment(){
                     />
                     </Form.Group>
                     <Form.Group className='mt-4' controlId="amount">
-                    <Form.Label><h4>Amount</h4></Form.Label>
-                    <Form.Control
-                        type="number"
-                        name="amount"
-                        value={txnDetails.amount}
-                        disabled
-                    />
+                    <Form.Label className="mb-0"><h4>Amount</h4></Form.Label>
+                        <Form.Group className='d-flex align-items-center'>
+                        <Form.Control
+                            type="number"
+                            name="amount"
+                            value={txnDetails.amount}
+                            disabled
+                            />
+                        <p className="ml-3">ether</p>
+                        </Form.Group>
                     </Form.Group>
                     <Form.Group className='mt-4' controlId="purpose">
                     <Form.Label><h4>Purpose</h4></Form.Label>

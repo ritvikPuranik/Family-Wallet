@@ -58,7 +58,7 @@ function ShowTransactions(){
                     <td className="fs-5">{item.from}</td>
                     <td className="fs-5">{item.to}</td>
                     <td>{item.purpose}</td>
-                    <td>{item.amount}</td>
+                    <td>{item.amount/10**18}</td>
                     <td>{item.status}</td>
                 </tr>
                 ))}

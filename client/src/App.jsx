@@ -5,11 +5,14 @@ import { Routes, Route, Link } from "react-router-dom";
 
 import ShowTransactions from './pages/ShowTransactions';
 import MakePayment from "./pages/MakePayment";
+import AddMember from './pages/AddMember';
+import AuthorizePayment from './pages/AuthorizePayment';
+import Login from './pages/Login';
+
+import PrivateRoute from './components/PrivateRoute';
 import Footer from "./components/Footer";
 import AccountDetails from './components/AccountDetail';
 import ParentControls from './components/ParentControls';
-import AddMember from './pages/AddMember';
-import AuthorizePayment from './pages/AuthorizePayment';
 
 import useEth from './contexts/EthContext/useEth';
 
@@ -26,6 +29,8 @@ const routes = [
 
 const MyNav = () => {
   const [isParent, setIsParent] = useState(true);
+  const [isAuthenticated, setAuthenticated] = useState(false);
+
   const { state: {contract, accounts, web3} } = useEth();
 
   useEffect(() => {
@@ -56,14 +61,14 @@ const MyNav = () => {
         <div className="col-2">
           <nav className="navbar bg-black vh-100 d-flex flex-column">
             <ul className='nav navbar-nav mt-initial align-items-center'>
-            {routes.map(({ title, link }, index) => {
+            {isAuthenticated && routes.map(({ title, link }, index) => {
               return (
                 <li key={index} className="p-4 nav-item">
                   <Link  className='nav-link text-white' to={link}>{title}</Link>
                 </li>
               );
             })}
-            {isParent && <ParentControls />}
+            {isAuthenticated && isParent && <ParentControls />}
             </ul>
             
           </nav>
@@ -71,10 +76,47 @@ const MyNav = () => {
 
         <div className="col-10 container">
           <Routes>
-            <Route path="/" element={<ShowTransactions />} />
-            <Route path="payment" element={<MakePayment />} />
-            <Route path="add_member" element={<AddMember />} />
-            <Route path="authorize" element={<AuthorizePayment />} />
+            <Route path="/login" element={<Login />} />
+            <Route
+            path="/"
+            element={
+              <PrivateRoute >
+                <ShowTransactions />
+                {isAuthenticated}
+                {setAuthenticated}
+              </PrivateRoute>
+            }
+          />
+            <Route
+            path="payment"
+            element={
+              <PrivateRoute >
+                <MakePayment />
+                {isAuthenticated}
+                {setAuthenticated}
+              </PrivateRoute>
+            }
+          />
+            <Route
+            path="add_member"
+            element={
+              <PrivateRoute >
+                <AddMember />
+                {isAuthenticated}
+                {setAuthenticated}
+              </PrivateRoute>
+            }
+          />
+            <Route
+            path="authorize"
+            element={
+              <PrivateRoute >
+                <AuthorizePayment />
+                {isAuthenticated}
+                {setAuthenticated}
+              </PrivateRoute>
+            }
+          />
           </Routes>
         </div>
       </div>
@@ -85,6 +127,8 @@ const MyNav = () => {
 
 function App() {
   return (
+    <>
+    
     
        <div id="App">
         <div className="container">
@@ -92,6 +136,7 @@ function App() {
           <Footer />
         </div>
       </div>
+    </>
   );
 }
 
