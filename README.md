@@ -1,18 +1,36 @@
-# React Truffle Box
+# Family Wallet
 
-This box comes with everything you need to start using Truffle to write, compile, test, and deploy smart contracts, and interact with them from a React app.
+An expense management tool coupled with a wallet, for the family. An authenticated session ensures only members of a family are interacting with the app. A "parent" has the authority to accept/ reject any transaction, as well as add other members to the family. A member can initiate payment but funds are only going to be transferred once approved(they're stored in the smart contract until then). If a transaction gets rejected, the funds are returned to the sender.
 
-## Installation
+## Features
 
-First ensure you are in an empty directory.
 
-Run the `unbox` command using 1 of 2 ways.
 
+## How to launch
+- Clone this repo, as well as the "Family-Wallet-Backend" repo.
+- Install Dependencies
 ```sh
-# Install Truffle globally and run `truffle unbox`
-$ npm install -g truffle
-$ truffle unbox react
+cd Family-Wallet/client;
+npm i;
+cd Family-Wallet/truffle;
+npm i;
 ```
+- Deploy the smart contract(ensure that ganache is running and metamask is setup to interact with local blockchain)
+```sh
+cd truffle;
+truffle migrate --reset
+```
+- Launch the server in and the frontend - 
+```sh
+cd client;
+npm start;
+```
+For the Server(in the Family-Wallet-Backend repo) - 
+```sh
+npm i;
+npm start;
+```
+
 
 ```sh
 # Alternatively, run `truffle unbox` via npx
@@ -27,13 +45,3 @@ $ npm start
 ```
 
 From there, follow the instructions on the hosted React app. It will walk you through using Truffle and Ganache to deploy the `SimpleStorage` contract, making calls to it, and sending transactions to change the contract's state.
-
-## FAQ
-
-- __How do I use this with Ganache (or any other network)?__
-
-  The Truffle project is set to deploy to Ganache by default. If you'd like to change this, it's as easy as modifying the Truffle config file! Check out [our documentation on adding network configurations](https://trufflesuite.com/docs/truffle/reference/configuration/#networks). From there, you can run `truffle migrate` pointed to another network, restart the React dev server, and see the change take place.
-
-- __Where can I find more resources?__
-
-  This Box is a sweet combo of [Truffle](https://trufflesuite.com) and [Webpack](https://webpack.js.org). Either one would be a great place to start!
