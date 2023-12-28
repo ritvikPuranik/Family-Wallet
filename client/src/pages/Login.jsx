@@ -10,9 +10,13 @@ function Login(){
 
     const handleLogin = async () => {
       try {
+        let reqBody = { userName: username, password: password };
+        console.log("reqBody>>", reqBody);
+        
         let requestOptions = {
             method: "POST", 
-            body: JSON.stringify({ username, password }),
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(reqBody),
             redirec: true
         }
         let response = await fetch('http://localhost:3000/login', requestOptions);
