@@ -10,6 +10,9 @@ Transactions are made by uploading a QR code, which is then decoded on the backe
 - Make Payment - Upload a QR code which is then decoded and then can be used to make a payment. Eventually can be scanned from device camera.
 - Authenticated Routes - Can only be accessed by family members
 
+## Images
+https://drive.google.com/drive/folders/1wjm50TAUEFbyFIAVi6vw5xfhSLp8kvP-?usp=sharing
+
 
 ## How to launch
 - Clone this repo, as well as the "Family-Wallet-Backend" repo.
