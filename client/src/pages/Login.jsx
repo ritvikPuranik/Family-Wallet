@@ -1,76 +1,80 @@
-import React, {useState} from "react";
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {Container, Card, Form, Button} from 'react-bootstrap';
+import { Form, Input, Button, Card, message } from 'antd';
 
-function Login(){
-    const navigate = useNavigate();
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+import { useAuth } from '../contexts/AuthContext';
 
-    const handleLogin = async () => {
-      try {
-        let reqBody = { userName: username, password: password };
-        console.log("reqBody>>", reqBody);
-        
-        let requestOptions = {
-            method: "POST", 
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(reqBody),
-            redirec: true
-        }
-        let response = await fetch('http://localhost:3000/login', requestOptions);
-        console.log("response>", response);
-        response = await response.json();
-        console.log("response json>", response);
-        if(response){
-            setError('');
-            localStorage.setItem('isLoggedIn', true);
-            navigate('/');
-        }
+const LoginRegister = () => {
+  console.log("entered login page");
+  const navigate = useNavigate();
+  const { userDetails, setUser } = useAuth();
+  const [isLogin, setIsLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-      } catch (error) {
-        console.error('Login error:', error);
-        setError(error.response.data.message);
+  const onFinish = async (values) => {
+    setLoading(true);
+    try {
+      const url = isLogin ? 'http://localhost:3000/login' : 'http://localhost:3000/register';
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values),
+      });
+      const result = await response.json();
+      console.log("result>", result);
+      if (response.ok) {
+        message.success(isLogin ? 'Login successful!' : 'Registration successful!');
+        setUser(result.user);
+        navigate('/');
+      } else {
+        message.error(result.message || 'Something went wrong!');
       }
-    };
-  
-    return (
-      <Container className="mt-5">
-      <Card style={{ maxWidth: '400px', margin: 'auto' }}>
-        <Card.Body>
-          <Card.Title className="text-center m-4 fs-2">Login</Card.Title>
-          <Form>
-            <Form.Group className="m-3" controlId="formUsername">
-              <Form.Label>Username</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter your username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </Form.Group>
+    } catch (error) {
+      message.error('Network error!');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-            <Form.Group className="m-3" controlId="formPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Form.Group>
+  return (
+    <Card title={isLogin ? 'Login' : 'Register'} style={{ maxWidth: 400, margin: 'auto', marginTop: 50 }}>
+      <Form onFinish={onFinish}>
+        <Form.Item name="username" rules={[{ required: true, message: 'Please input your username!' }]}>
+          <Input placeholder="Username" />
+        </Form.Item>
+        <Form.Item name="password" rules={[{ required: true, message: 'Please input your password!' }]}>
+          <Input.Password placeholder="Password" />
+        </Form.Item>
+        {!isLogin && (
+          <Form.Item name="confirmPassword" dependencies={['password']} rules={[
+            { required: true, message: 'Please confirm your password!' },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('password') === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error('The two passwords do not match!'));
+              },
+            }),
+          ]}>
+            <Input.Password placeholder="Confirm Password" />
+          </Form.Item>
+        )}
+        <Form.Item>
+          <Button type="primary" htmlType="submit" loading={loading} block>
+            {isLogin ? 'Login' : 'Register'}
+          </Button>
+        </Form.Item>
+        <Form.Item>
+          <Button type="link" onClick={() => setIsLogin(!isLogin)} block>
+            {isLogin ? 'Register now!' : 'Back to login'}
+          </Button>
+        </Form.Item>
+      </Form>
+    </Card>
+  );
+};
 
-            <Button variant="success" className="m-3" type="button" onClick={handleLogin} block>
-              Login
-            </Button>
-          </Form>
-        </Card.Body>
-      </Card>
-    </Container>
-    );
-
-}
-
-export default Login;
+export default LoginRegister;
+// export default Login;
 

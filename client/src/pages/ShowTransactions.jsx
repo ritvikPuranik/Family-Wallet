@@ -3,8 +3,9 @@ import useEth from "../contexts/EthContext/useEth";
 
 
 function ShowTransactions(){
-    // console.log("useEth>", useEth());
+    console.log("showing tranasctions");
     const { state: {web3, accounts, contract } } = useEth();
+    console.log("accounts>", accounts);
     const [userAccount, setUserAccount] = useState("");
     const [transactions, setTransactions] = useState([]);
 
