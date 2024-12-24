@@ -14,10 +14,11 @@ const LoginRegister = () => {
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      const url = isLogin ? 'http://localhost:3000/login' : 'http://localhost:3000/register';
+      const url = isLogin ?  `${process.env.REACT_APP_API_URL}/login` : `${process.env.REACT_APP_API_URL}/register`;
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(values),
       });
       const result = await response.json();

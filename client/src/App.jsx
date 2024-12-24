@@ -109,37 +109,42 @@ const routes = [
 // }
 
 function App() {
-  const navigate = useNavigate();
   const { userDetails, setUser } = useAuth();
+  const [loading, setLoading] = useState(true);
+
   console.log("userDetaisl>", userDetails);
 
-  // useEffect(() => {
-  //   const checkSession = async () => {
-  //     try {
-  //       let response = await fetch('/isValidSession', { method: 'GET' });
-  //       response = await response.json();
-  //       if (response) {
-  //         setUser(response);
-  //       } else {
-  //         setUser(response);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error checking session', error);
-  //       setUser(null);
-  //     }
-  //   };
 
-  //   checkSession();
-  // }, [navigate]);
-
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        console.log("checking session", process.env.REACT_APP_API_URL);
+        let response = await fetch(`${process.env.REACT_APP_API_URL}/isValidSession`, { method: 'GET', credentials: 'include' });
+        response = await response.json();
+        if (response) {
+          setUser(response.user);
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error('Error checking session', error);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkSession();
+    console.log("userDetaisl inside>", userDetails);
+  }, []);
 
 
   return (
-    <div id="App">
+    loading ? (<div>Loading...</div>) : (
+      <div id="App">
         <Routes>
           <Route
             path="/"
-            element={ userDetails?.id ? <ShowTransactions /> : <Navigate to="/login" />}
+            element={userDetails?.id ? <ShowTransactions /> : <Navigate to="/login" />}
           />
           <Route
             path="payment"
@@ -159,9 +164,10 @@ function App() {
               <AuthorizePayment />
             }
           />
-          <Route path="login" element={<LoginRegister /> } />
+          <Route path="login" element={<LoginRegister />} />
         </Routes>
       </div>
+    )
   );
 }
 

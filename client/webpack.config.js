@@ -1,9 +1,16 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const EslintWebpackPlugin = require("eslint-webpack-plugin");
-
+const webpack = require("webpack");
 const extensions = [".js", ".jsx"];
+const dotenv = require("dotenv");
 
+const env = dotenv.config().parsed;
+// Create an object to hold the environment variables for DefinePlugin
+const envKeys = Object.keys(env).reduce((prev, next) => {
+  prev[`process.env.${next}`] = JSON.stringify(env[next]);
+  return prev;
+}, {});
 module.exports = {
   mode: process.env.NODE_ENV === "production" ? "production" : "development",
   entry: "./src/index.jsx",
@@ -42,6 +49,8 @@ module.exports = {
       template: "./public/index.html",
       favicon: "./public/favicon.ico",
     }),
+    new webpack.DefinePlugin(envKeys), // Add DefinePlugin here
+
   ],
   stats: "minimal",
 };
