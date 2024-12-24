@@ -9,23 +9,12 @@ import AddMember from './pages/AddMember';
 import AuthorizePayment from './pages/AuthorizePayment';
 import LoginRegister from './pages/Login';
 
-import Footer from "./components/Footer";
 import AccountDetails from './components/AccountDetail';
 import ParentControls from './components/ParentControls';
 
 import useEth from './contexts/EthContext/useEth';
 import { useAuth } from './contexts/AuthContext';
 
-const routes = [
-  {
-    title: "Transactions",
-    link: "/",
-  },
-  {
-    title: "Make Payment",
-    link: "payment",
-  },
-];
 
 // const MyNav = () => {
 //   const [isParent, setIsParent] = useState(true);
@@ -142,14 +131,21 @@ function App() {
     loading ? (<div>Loading...</div>) : (
       <div id="App">
         <Routes>
+          <Route path="/login" element={<LoginRegister />} />
           <Route
             path="/"
-            element={userDetails?.id ? <ShowTransactions /> : <Navigate to="/login" />}
+            element={userDetails?.id ?  <Navigate to="/my_transactions" /> : <Navigate to="/login" />}
           />
           <Route
             path="payment"
             element={
               <MakePayment />
+            }
+          />
+          <Route
+            path="my_transactions"
+            element={
+              <ShowTransactions />
             }
           />
           <Route
@@ -164,7 +160,6 @@ function App() {
               <AuthorizePayment />
             }
           />
-          <Route path="login" element={<LoginRegister />} />
         </Routes>
       </div>
     )

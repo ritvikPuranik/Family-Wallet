@@ -1,14 +1,20 @@
-html {
+/* html {
   font-size: 10px;
   font-family: sans-serif;
-}
+} */
 
 * {
   margin: 0;
   padding: 0;
 }
 
-#App {
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* #App {
   width: 100%;
   height: 100%;
   display: flex;
@@ -21,12 +27,36 @@ html {
   --gray: #999;
   --light-gray: #e0e0e0;
   --dark-gray: #777;
-}
+} */
 
 #App .container {
   height: 100%;
 }
 
+#App {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.container-fluid {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  flex: 1;
+  display: flex;
+}
+
+.col-2, .col-10 {
+  height: 100%;
+}
+
+.vh-100 {
+  height: 100vh;
+}
 code {
   display: block;
   white-space: pre-wrap;

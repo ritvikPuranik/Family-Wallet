@@ -1,4 +1,4 @@
-function Footer() {
+function CustomFooter() {
   return (
     <footer style={{ position: 'relative', bottom: 0, width: '100%', textAlign: 'center' }}>
       <p><span className="code">Made by Ritvik</span></p>
@@ -6,4 +6,4 @@ function Footer() {
   );
 }
 
-export default Footer;
+export default CustomFooter;
