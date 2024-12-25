@@ -9,7 +9,7 @@ function AddMember() {
   const navigate = useNavigate();
   const { userDetails } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [connectedWallets, setConnectedWallets] = useState(['axB10', 'axB21']);
+//   const [connectedWallets, setConnectedWallets] = useState(['axB10', 'axB21']);
 
   const onFinish = async (values) => {
     setLoading(true);
@@ -29,6 +29,8 @@ function AddMember() {
         if(response.status === 401){
             message.error('Unauthorized!');
             navigate('/login');
+        }else if(response.status === 404){
+            message.error(result.message || 'User not found');
         }else{
         message.error(result.message || 'Something went wrong!');
         }
@@ -44,18 +46,11 @@ function AddMember() {
 const getContent = () => (
     <Form style={{margin: '10px'}} onFinish={onFinish} layout="vertical">
         <Form.Item
-            name="username"
-            label="Username"
-            rules={[{ required: true, message: 'Please input the username!' }]}
+            name="walletAddress"
+            label="Wallet Address"
+            rules={[{ required: true, message: 'Please input the wallet address!' }]}
         >
-            <Input placeholder="Username" />
-        </Form.Item>
-        <Form.Item
-            name="password"
-            label="Password"
-            rules={[{ required: true, message: 'Please input the password!' }]}
-        >
-            <Input type="password" placeholder="Password" />
+            <Input type="password" placeholder="Provide the public address of the new member" />
         </Form.Item>
         <Form.Item
             name="isParent"
@@ -67,13 +62,7 @@ const getContent = () => (
                 <Select.Option value="false">False</Select.Option>
             </Select>
         </Form.Item>
-        <Form.Item
-            name="walletAddress"
-            label="Wallet Address"
-            rules={[{ required: true, message: 'Please input the wallet address!' }]}
-        >
-            <Input type="password" placeholder="Provide the public address of the new member" />
-        </Form.Item>
+        
         <Form.Item>
             <Button type="primary" htmlType="submit" loading={loading}>
                 Submit

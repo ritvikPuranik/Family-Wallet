@@ -47,6 +47,7 @@ const LoginRegister = () => {
           <Input.Password placeholder="Password" />
         </Form.Item>
         {!isLogin && (
+          <>
           <Form.Item name="confirmPassword" dependencies={['password']} rules={[
             { required: true, message: 'Please confirm your password!' },
             ({ getFieldValue }) => ({
@@ -60,6 +61,10 @@ const LoginRegister = () => {
           ]}>
             <Input.Password placeholder="Confirm Password" />
           </Form.Item>
+          <Form.Item name="walletAddress" rules={[{ required: true, message: 'Please input your wallet address' }]}>
+          <Input.Password placeholder="Wallet Address" />
+        </Form.Item>
+        </>
         )}
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={loading} block>
