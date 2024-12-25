@@ -103,32 +103,7 @@ function App() {
 
   console.log("userDetaisl>", userDetails);
 
-
-  useEffect(() => {
-    const checkSession = async () => {
-      try {
-        console.log("checking session", process.env.REACT_APP_API_URL);
-        let response = await fetch(`${process.env.REACT_APP_API_URL}/isValidSession`, { method: 'GET', credentials: 'include' });
-        response = await response.json();
-        if (response) {
-          setUser(response.user);
-        } else {
-          setUser(null);
-        }
-      } catch (error) {
-        console.error('Error checking session', error);
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-    checkSession();
-    console.log("userDetaisl inside>", userDetails);
-  }, []);
-
-
   return (
-    loading ? (<div>Loading...</div>) : (
       <div id="App">
         <Routes>
           <Route path="/login" element={<LoginRegister />} />
@@ -162,7 +137,7 @@ function App() {
           />
         </Routes>
       </div>
-    )
+    
   );
 }
 

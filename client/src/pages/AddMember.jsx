@@ -83,7 +83,7 @@ const getContent = () => (
 );
 
   return (
-    <CustomLayout activeTab={'make_payment'} content={getContent} />
+    <CustomLayout activeTab={'add_member'} content={getContent} />
   );
 }
 
