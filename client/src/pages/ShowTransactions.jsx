@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Table, Layout } from 'antd';
 import useEth from "../contexts/EthContext/useEth";
+import CustomLayout from "./CustomLayout";
 import VerticalMenu from "../components/VerticalMenu";
 import CustomFooter from "../components/Footer";
 import { useAuth } from "../contexts/AuthContext";
 
-const { Header, Sider, Footer, Content } = Layout;
 
 function ShowTransactions() {
     console.log("showing tranasctions");
     const {userDetails} = useAuth();
     const [transactions, setTransactions] = useState([]);
-
 
     useEffect(() => {
         const populateData = async () => {
@@ -32,8 +31,6 @@ function ShowTransactions() {
             }catch(err){
                 console.error('Error getting transactions', err);
             }
-
-
         }
 
         populateData();
@@ -44,11 +41,6 @@ function ShowTransactions() {
             title: 'Date',
             dataIndex: 'date',
             key: 'date',
-        },
-        {
-            title: 'From',
-            dataIndex: 'from',
-            key: 'from',
         },
         {
             title: 'To',
@@ -64,7 +56,7 @@ function ShowTransactions() {
             title: 'Amount',
             dataIndex: 'amount',
             key: 'amount',
-            render: (text) => text / 10 ** 18,
+            render: (text) => text,
         },
         {
             title: 'Status',
@@ -73,34 +65,23 @@ function ShowTransactions() {
         },
     ];
 
+    const getContent = () =>{
+        return (
+            <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                      <Table
+                      style={{ flex: 1 }}
+                      columns={columns}
+                      dataSource={transactions}
+                      rowKey={(record, index) => index}
+                      pagination={false}
+                      scroll={{ y: 'calc(100vh - 200px)' }} // Adjust the height calculation as needed
+                      />
+                  </div>
+        )
+    }
 
     return (
-        <Layout >
-            <Header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div style={{ color: 'white', fontSize: '24px' }}>Family Wallet</div>
-                <div style={{ color: 'white' }}>{userDetails.id}</div>
-            </Header>
-            <Layout>
-                <Sider width="15%" >
-                    <VerticalMenu activeTab={'my_transactions'}/>
-                </Sider>
-                <Content style={{ height: '100%' }}>
-                    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                        <Table
-                        style={{ flex: 1 }}
-                        columns={columns}
-                        dataSource={transactions}
-                        rowKey={(record, index) => index}
-                        pagination={false}
-                        scroll={{ y: 'calc(100vh - 200px)' }} // Adjust the height calculation as needed
-                        />
-                    </div>
-                </Content>
-            </Layout>
-            <Footer>
-                <CustomFooter />
-            </Footer>
-        </Layout>
+        <CustomLayout activeTab={'my_transactions'} content={getContent}/>
     );
 }
 

@@ -137,7 +137,7 @@ function App() {
             element={userDetails?.id ?  <Navigate to="/my_transactions" /> : <Navigate to="/login" />}
           />
           <Route
-            path="payment"
+            path="make_payment"
             element={
               <MakePayment />
             }
