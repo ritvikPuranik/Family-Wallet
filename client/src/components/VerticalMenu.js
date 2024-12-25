@@ -52,8 +52,6 @@ const VerticalMenu = (props) => {
     },
   ];
 
-  console.log("props>", props);
-
   const onClick = (e) => {
     if (e.key === 'logout') {
       fetch(`${process.env.REACT_APP_API_URL}/logout`, { method: 'POST', credentials: 'include' })

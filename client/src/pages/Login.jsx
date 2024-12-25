@@ -7,14 +7,14 @@ import { useAuth } from '../contexts/AuthContext';
 const LoginRegister = () => {
   console.log("entered login page");
   const navigate = useNavigate();
-  const { userDetails, setUser } = useAuth();
+  const { setUser } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      const url = isLogin ?  `${process.env.REACT_APP_API_URL}/login` : `${process.env.REACT_APP_API_URL}/register`;
+      const url = isLogin ? `${process.env.REACT_APP_API_URL}/login` : `${process.env.REACT_APP_API_URL}/register`;
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -48,23 +48,20 @@ const LoginRegister = () => {
         </Form.Item>
         {!isLogin && (
           <>
-          <Form.Item name="confirmPassword" dependencies={['password']} rules={[
-            { required: true, message: 'Please confirm your password!' },
-            ({ getFieldValue }) => ({
-              validator(_, value) {
-                if (!value || getFieldValue('password') === value) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(new Error('The two passwords do not match!'));
-              },
-            }),
-          ]}>
-            <Input.Password placeholder="Confirm Password" />
-          </Form.Item>
-          <Form.Item name="walletAddress" rules={[{ required: true, message: 'Please input your wallet address' }]}>
-          <Input.Password placeholder="Wallet Address" />
-        </Form.Item>
-        </>
+            <Form.Item name="confirmPassword" dependencies={['password']} rules={[
+              { required: true, message: 'Please confirm your password!' },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue('password') === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error('The two passwords do not match!'));
+                },
+              }),
+            ]}>
+              <Input.Password placeholder="Confirm Password" />
+            </Form.Item>
+          </>
         )}
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={loading} block>
@@ -82,5 +79,3 @@ const LoginRegister = () => {
 };
 
 export default LoginRegister;
-// export default Login;
-

@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Table, Layout } from 'antd';
-import useEth from "../contexts/EthContext/useEth";
+import { Table } from 'antd';
 import CustomLayout from "./CustomLayout";
-import VerticalMenu from "../components/VerticalMenu";
-import CustomFooter from "../components/Footer";
-import { useAuth } from "../contexts/AuthContext";
 
 
 function ShowTransactions() {
-    console.log("showing tranasctions");
-    const {userDetails} = useAuth();
     const [transactions, setTransactions] = useState([]);
 
     useEffect(() => {
@@ -43,7 +37,12 @@ function ShowTransactions() {
             key: 'date',
         },
         {
-            title: 'To',
+            title: 'From Address',
+            dataIndex: 'from',
+            key: 'from',
+        },
+        {
+            title: 'To Address',
             dataIndex: 'to',
             key: 'to',
         },
