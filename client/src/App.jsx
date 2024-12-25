@@ -155,7 +155,7 @@ function App() {
             }
           />
           <Route
-            path="authorize"
+            path="authorize_payment"
             element={
               <AuthorizePayment />
             }
