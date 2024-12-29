@@ -4,6 +4,7 @@ import CustomLayout from "./CustomLayout";
 
 
 function ShowTransactions() {
+    console.log("show transactions component");
     const [transactions, setTransactions] = useState([]);
 
     useEffect(() => {
