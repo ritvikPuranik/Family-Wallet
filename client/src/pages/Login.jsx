@@ -49,9 +49,15 @@ const LoginRegister = () => {
   return (
     <Card title={isLogin ? 'Login' : 'Register'} style={{ maxWidth: 400, margin: 'auto', marginTop: 50 }}>
       <Form form={form} onFinish={onFinish}>
-        <Form.Item name="username" rules={[{ required: true, message: 'Please input your username!' }]}>
-          <Input placeholder="Username" />
-        </Form.Item>
+      <Form.Item
+              name="account"
+              label="Account"
+              // initialValue={account ? `${account.slice(0, 8)}...${account.slice(-9)}` : ''}
+              initialValue={account}
+            >
+              {/* <Input value={account ? `${account.slice(0, 8)}...${account.slice(-9)}` : ''} disabled /> */}
+              <Input value={account} disabled />
+            </Form.Item>
         <Form.Item name="password" rules={[{ required: true, message: 'Please input your password!' }]}>
           <Input.Password placeholder="Password" />
         </Form.Item>
@@ -70,15 +76,13 @@ const LoginRegister = () => {
             ]}>
               <Input.Password placeholder="Confirm Password" />
             </Form.Item>
-            <Form.Item
+            {/* <Form.Item
               name="account"
               label="Account"
-              // initialValue={account ? `${account.slice(0, 8)}...${account.slice(-9)}` : ''}
               initialValue={account}
             >
-              {/* <Input value={account ? `${account.slice(0, 8)}...${account.slice(-9)}` : ''} disabled /> */}
               <Input value={account} disabled />
-            </Form.Item>
+            </Form.Item> */}
           </>
         )}
         <Form.Item>
