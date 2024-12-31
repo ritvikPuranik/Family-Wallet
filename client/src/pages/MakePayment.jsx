@@ -43,13 +43,13 @@ function MakePayment() {
 
 const getContent = () => (
     <Form style={{margin: '10px'}} onFinish={onFinish} layout="vertical">
-        <Form.Item
+        {/* <Form.Item
             name="from"
             label="From"
             initialValue={account}
         >
             <Input value={account} disabled />
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item
             name="to"
             label="To"

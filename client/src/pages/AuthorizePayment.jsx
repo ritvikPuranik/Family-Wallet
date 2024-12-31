@@ -26,6 +26,7 @@ function AuthorizePayment() {
 
 const handleAction = async (record, isApproved) => {
     try {
+      console.log("record>", record);
         const response = await fetch(`${process.env.REACT_APP_API_URL}/approveOrRejectTransaction`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -53,11 +54,6 @@ const handleAction = async (record, isApproved) => {
       key: 'date',
     },
     {
-      title: 'Payor',
-      dataIndex: 'payor',
-      key: 'payor',
-    },
-    {
       title: 'From Address',
       dataIndex: 'from',
       key: 'from',
@@ -83,8 +79,8 @@ const handleAction = async (record, isApproved) => {
       key: 'action',
       render: (text, record) => (
         <span>
-          <Button type="link" onClick={() => handleAction(record, true)}>Approve</Button>
-          <Button type="link" onClick={() => handleAction(record, false)}>Reject</Button>
+          <Button style={{color: "green"}} type="link" onClick={() => handleAction(record, true)}>Approve</Button>
+          <Button style={{color: "red"}} type="link" onClick={() => handleAction(record, false)}>Reject</Button>
         </span>
       ),
     },
