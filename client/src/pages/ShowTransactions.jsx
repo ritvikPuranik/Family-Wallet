@@ -1,70 +1,88 @@
 import React, { useEffect, useState } from "react";
-import useEth from "../contexts/EthContext/useEth";
+import { Table } from 'antd';
+import CustomLayout from "./CustomLayout";
 
 
-function ShowTransactions(){
-    // console.log("useEth>", useEth());
-    const { state: {web3, accounts, contract } } = useEth();
-    const [userAccount, setUserAccount] = useState("");
+function ShowTransactions() {
+    console.log("show transactions component");
     const [transactions, setTransactions] = useState([]);
 
-
-    useEffect(()=>{
-        const populateData = async()=>{
-            let txns = [];
+    useEffect(() => {
+        const populateData = async () => {
             try{
-                let txnLength = await contract.methods.txnCount().call({from: userAccount});
-                for(let i=0; i<txnLength; i++){
-                    let txnData = await contract.methods.txns(i).call({from: userAccount});
-                    // console.log("txnData>", txnData);
-                    txns.push(txnData);
+                //make an api client call to get the transactions for the user
+                const url = `${process.env.REACT_APP_API_URL}/getTransactions`;
+                let response = await fetch(url, {  
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                });
+                if(response.ok) {
+                    response = await response.json();
+                    setTransactions(response.transactions);
                 }
             }catch(err){
-                console.log("context not yet set>>", err);
-            }
-
-            setTransactions(txns);
-        }
-
-        const getAccount = async() =>{
-            let myAccounts = await accounts;
-            if(myAccounts){
-                let firstAccount = myAccounts[0];
-                console.log("account>", firstAccount);
-                setUserAccount(firstAccount);
+                console.error('Error getting transactions', err);
             }
         }
-        getAccount();
+
         populateData();
-    },[accounts]);
+    }, []);
 
+    const columns = [
+        {
+            title: 'Date',
+            dataIndex: 'date',
+            key: 'date',
+        },
+        {
+            title: 'From Address',
+            dataIndex: 'from',
+            key: 'from',
+        },
+        {
+            title: 'To Address',
+            dataIndex: 'to',
+            key: 'to',
+        },
+        {
+            title: 'Purpose',
+            dataIndex: 'purpose',
+            key: 'purpose',
+        },
+        {
+            title: 'Amount',
+            dataIndex: 'amount',
+            key: 'amount',
+            render: (text) => text,
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+        },
+    ];
+
+    const getContent = () =>{
+        return (
+            <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                      <Table
+                      style={{ flex: 1 }}
+                      columns={columns}
+                      dataSource={transactions}
+                      rowKey={(record, index) => index}
+                      pagination={false}
+                      scroll={{ y: 'calc(100vh - 200px)' }} // Adjust the height calculation as needed
+                      />
+                  </div>
+        )
+    }
 
     return (
-        <table className="table table-striped">
-            <thead>
-                <tr>
-                <th className="fs-2">Date</th>
-                <th className="fs-2">From</th>
-                <th className="fs-2">To</th>
-                <th className="fs-2">Purpose</th>
-                <th className="fs-2">Amount</th>
-                <th className="fs-2">Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {transactions.map((item, index) => (
-                <tr key={index}>
-                    <td>{item.date}</td>
-                    <td className="fs-5">{item.from}</td>
-                    <td className="fs-5">{item.to}</td>
-                    <td>{item.purpose}</td>
-                    <td>{item.amount/10**18}</td>
-                    <td>{item.status}</td>
-                </tr>
-                ))}
-            </tbody>
-        </table>
-        )
+        <CustomLayout activeTab={'my_transactions'} content={getContent}/>
+    );
 }
 
 export default ShowTransactions;
