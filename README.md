@@ -1,41 +1,78 @@
 # Family Wallet
 
-An expense management tool coupled with a wallet, for the family. An authenticated session ensures only members of a family are interacting with the app. A "parent" has the authority to accept/ reject any transaction, as well as add other members to the family. A member can initiate payment but funds are only going to be transferred once approved(they're stored in the smart contract until then). If a transaction gets rejected, the funds are returned to the sender.
-Transactions are made by uploading a QR code, which is then decoded on the backend.
+**Family Wallet** is an ERC20-based expense management tool designed for families. It ensures secure, authenticated interactions between family members within the app. A designated "parent" has the authority to approve or reject transactions and add other family members. Members can initiate payments, but funds are transferred only after parental approval. The project includes server-side interaction with the smart contract for enhanced security.
 
 ## Features
-- Parental Controls - 
-  - Can add another parent or even a member of the family
-  - Authorize transactions initiated by members
-- Make Payment - Upload a QR code which is then decoded and then can be used to make a payment. Eventually can be scanned from device camera.
-- Authenticated Routes - Can only be accessed by family members
 
-## Images
-https://drive.google.com/drive/folders/1wjm50TAUEFbyFIAVi6vw5xfhSLp8kvP-?usp=sharing
+- **Parental Controls**  
+  - Add new members or additional parents to the family.  
+  - Authorize or reject transactions initiated by members.
 
+- **Make Payments**  
+  - Initiate payments by providing the recipient's wallet address and purpose. Transactions are processed only after approval from a parent.
 
-## How to launch
-- Clone this repo, as well as the "Family-Wallet-Backend" repo.
-- Install Dependencies
-```sh
-cd Family-Wallet/client
-npm i
-cd Family-Wallet/truffle
-npm i
-```
-- Deploy the smart contract(ensure that ganache is running and metamask is setup to interact with local blockchain)
-```sh
-cd truffle
-truffle migrate --reset
-```
-- Launch the server in and the frontend - 
-```sh
-cd client
-npm start
-```
-For the Server(in the Family-Wallet-Backend repo) - 
-```sh
-npm i
-npm start
-```
-- Once the app is up and running, you will be greeted with a login page. Type anything you wish and press submit to start interacting with the app.
+- **Authenticated Routes**  
+  - Ensure only family members have access to the app's features.
+
+## Demo Images
+
+View screenshots and images [here](https://drive.google.com/drive/folders/1wjm50TAUEFbyFIAVi6vw5xfhSLp8kvP-?usp=sharing).
+
+---
+
+## Run Locally
+
+Follow the steps below to run the Family Wallet project locally.
+
+### Prerequisites
+- Clone this repository and the [Family Wallet Backend](https://github.com/ritvikPuranik/Family-Wallet-Backend) repository.
+
+### Client Setup
+1. Navigate to the client directory and install dependencies:
+    ```bash
+    cd Family-Wallet/client
+    npm i
+    npm start
+    ```
+
+### Server & Smart Contract Setup
+1. Clone the backend repository:
+    ```bash
+    git clone https://github.com/ritvikPuranik/Family-Wallet-Backend.git
+    ```
+2. Launch the local blockchain and server:
+   - Open two terminal windows and navigate to the backend directory:
+     ```bash
+     cd Family-Wallet-Backend/hardhat
+     ```
+   - In the first terminal, start the local blockchain:
+     ```bash
+     npx hardhat node
+     ```
+   - In the second terminal, compile the smart contract and start the server:
+     ```bash
+     npm i
+     npx hardhat compile
+     npm start
+     ```
+
+---
+
+## Getting Started
+
+Once the app is running, you'll be greeted by the login page. Here's how to begin:  
+1. The smart contract is pre-configured with a master account using the 10th wallet address from Hardhat's local blockchain.  
+2. Connect the 10th wallet address in MetaMask.  
+3. Log in as the master by entering the password: `password`.  
+
+### Create New Accounts  
+- Register new accounts through the home page (one account can be created per wallet address).  
+- Log back in as the master and add the newly created accounts as members of your family.
+
+Explore all the features using the master and member accounts!
+
+---
+
+## Author
+
+- [@ritvikPuranik](https://github.com/ritvikPuranik)
